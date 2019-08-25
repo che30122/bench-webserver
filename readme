@@ -1,0 +1,31 @@
+this is a simple web bench can be used to bench your web server
+
+how to compile:
+	make clean
+	make
+
+how to execute:
+	./bench <command line option>
+
+command line option:
+
+-p --port  	:choose the port you want to connect (must)
+
+-h --header 	:set your http header use ';' to separate each line(option)
+
+-d --data	:the data you would like to send use ';' to separate each line (option)
+
+-c --clientNum	:set client number (default 1)
+
+-u --uri 	:the uri to the service you want to bench (must) 
+#notice the format should be like this 
+ex : http://127.0.0.1/register
+you should specify the ip address instead of dns at this version
+
+--help 		:help info
+
+--get --post 	:choose post or get method (must and exclusive)
+
+--http09 --http10 --http11	:choose your http version (default version 1.1)
+
+
