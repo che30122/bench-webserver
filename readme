@@ -11,9 +11,9 @@ command line option:
 
 -p --port  	:choose the port you want to connect (must)
 
--h --header 	:set your http header use ';' to separate each line(option)
+-h --header 	:set your http header use '#' to separate each line and if you want to you space char(' ') please use '*' to instead(option)
 
--d --data	:the data you would like to send use ';' to separate each line (option)
+-d --data	:the data you would like to send use '#' to separate each data you what to send (option)
 
 -c --clientNum	:set client number (default 1)
 

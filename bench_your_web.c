@@ -121,7 +121,9 @@ void send_request(const char* req,const char* hostaddr,int port,char* res,int re
 	pthread_mutex_unlock(mutex);
 }
 void cat_request(char* req,char* uri,char* http_header,char* data,char* host_addr){
+//	strcat(req,"POST 127.0.0.1/register HTTP/1.1\r\nHost: 127.0.0.1:3000\r\nContent-Type: application/x-www-form-urlencoded\r\nHost: 127.0.0.1:3000\r\nConnection: keep-alive\r\n\r\nuserName=chen&userPasswd=chen\r\n");
 	char* temp;
+	int data_len,i;
 	switch(http_method){
 		case GET_METHOD:
 			strcat(req,"GET ");
@@ -131,6 +133,7 @@ void cat_request(char* req,char* uri,char* http_header,char* data,char* host_add
 			break;
 	}
 	strcat(req,uri);
+	//strcat(req,"/register");
 	strcat(req," HTTP/");
 	switch(http_version){
 		case HTTP09:
@@ -146,24 +149,44 @@ void cat_request(char* req,char* uri,char* http_header,char* data,char* host_add
 	strcat(req,CRLF);
 	strcat(req,"HOST: ");
 	strcat(req,host_addr);
+	//strcat(req,":3000");
 	strcat(req,CRLF);
+	if(data!=NULL){
+		data_len=(int)strlen(data);
+		char len2char[30];
+		sprintf(len2char,"Content-Length: %d\r\n",data_len);
+		strcat(req,len2char);
+	}
 	if(http_header!=NULL){
-		temp=strtok(http_header,";");
+		temp=strtok(http_header,"#");
 		while(temp!=NULL){
+			char *space=NULL;
+			space=strchr(temp,'*');
+                	if(space!=NULL)
+                        	space[0]=' ';
 			strcat(req,temp);
 			strcat(req,CRLF);
-			temp=strtok(NULL,";");
+			temp=strtok(NULL,"#");
 		}
 	}
 	strcat(req,CRLF);
+	//temp=NULL;
 	if(data!=NULL){
-		strcat(req,CRLF);
-		temp=strtok(data,";");
-        	while(temp!=NULL){
-            	    	strcat(req,temp);
-             		strcat(req,CRLF);
-			temp=strtok(NULL,";");
-        	}
+		//temp=strtok(data,"#");
+        	//while(temp!=NULL){	
+		for(i=0;i<data_len;i++){
+			if(data[i]=='#')
+				data[i]='&';
+		}
+		/*	char *space=NULL;
+			printf("temp : %s\n",temp);
+			space=strchr(temp,'');
+                	if(space!=NULL)
+                        	space[0]='&';*/
+      	    	strcat(req,data);
+             	strcat(req,CRLF);
+		/*	temp=strtok(NULL,"#");
+        	}*/
 	}
 }
 void child_handler(int sig){
